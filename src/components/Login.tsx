@@ -513,7 +513,7 @@ export default function Login({ onLoginSuccess, initialSuccessMessage }: LoginPr
         
         {/* Form Footer */}
         <div className="py-4 bg-slate-950/60 border-t border-white/5 text-center text-[10px] font-extrabold text-slate-500 uppercase tracking-widest shrink-0 rounded-b-[32px]">
-          SM-2 Academic Algorithm • Beihang Mandarin Flow
+          New Version 2.3.0 • Beihang Mandarin Flow
         </div>
 
       </motion.div>
