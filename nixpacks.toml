@@ -1,0 +1,17 @@
+[variables]
+# Must be production. This was previously "development", which meant a deploy
+# driven by this file started the Vite dev server *inside* the Node process at
+# runtime (see the !env.isProduction branch in server.ts) — bundling and serving
+# the whole app from memory and burning RAM and CPU on every request.
+# render.yaml sets NODE_ENV=production explicitly as well; the two must agree.
+# --include=dev below is what keeps the build toolchain installed regardless.
+NODE_ENV = "production"
+
+[phases.install]
+cmds = ["npm install --include=dev"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npm start"

@@ -1,0 +1,24 @@
+# Secrets — must never be committed. The project root holds a real .env with
+# JWT_SECRET and DASHSCOPE_API_KEY; anyone who reads them can forge an admin
+# session token or spend the AI budget.
+.env
+.env.*
+!.env.example
+
+# Dependencies and build output
+node_modules/
+dist/
+server.js
+
+# Local scratch / debug output
+*.log
+dev-server.log
+tmp-*/
+test-mongo.js
+test-qwen.js
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,641 @@
+@import "tailwindcss";
+
+/* The sticky app header is h-16 (4rem). scroll-padding-top keeps keyboard
+   focus and anchor scrolling from landing underneath it. */
+html {
+  scroll-padding-top: 5rem;
+}
+
+@theme {
+  --font-sans: "Inter", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Base style enhancements */
+body {
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+  /* Long unbroken strings (student IDs, long full names, file names) must
+     wrap instead of forcing content wider than its column, which is what
+     pushes layouts out of place on narrow screens. */
+  overflow-wrap: break-word;
+}
+
+/* Premium 3D text styling and cinematic animations */
+@keyframes premium-3d-float {
+  0% {
+    transform: translateY(0px) rotateX(6deg) rotateY(-4deg);
+    text-shadow: 
+      0 1px 0 #047857, 
+      0 2px 0 #047857, 
+      0 3px 0 #047857, 
+      0 4px 0 #0369a1, 
+      0 5px 1px rgba(0, 0, 0, 0.15),
+      0 0 10px rgba(16, 185, 129, 0.2), 
+      0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: translateY(-4px) rotateX(9deg) rotateY(-2deg);
+    text-shadow: 
+      0 1px 0 #10b981, 
+      0 2px 0 #059669, 
+      0 3px 0 #047857, 
+      0 4px 0 #047857, 
+      0 5px 0 #0369a1,
+      0 6px 1px rgba(0, 0, 0, 0.2),
+      0 0 25px rgba(16, 185, 129, 0.45), 
+      0 15px 30px rgba(0, 0, 0, 0.25);
+  }
+  100% {
+    transform: translateY(0px) rotateX(6deg) rotateY(-4deg);
+    text-shadow: 
+      0 1px 0 #047857, 
+      0 2px 0 #047857, 
+      0 3px 0 #047857, 
+      0 4px 0 #047857, 
+      0 5px 0 #0369a1, 
+      0 6px 1px rgba(0, 0, 0, 0.15),
+      0 0 10px rgba(16, 185, 129, 0.2), 
+      0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes premium-light-sweep {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) skewX(-12deg); }
+  50% { transform: translateX(100%) skewX(-12deg); }
+  100% { transform: translateX(100%) skewX(-12deg); }
+}
+
+.premium-3d-title {
+  font-family: "Outfit", "Inter", sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  background: linear-gradient(
+    135deg, 
+    #ffffff 0%, 
+    #ffffff 35%, 
+    #a7f3d0 50%, 
+    #ffffff 65%, 
+    #ffffff 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  animation: 
+    premium-3d-float 7s ease-in-out infinite,
+    premium-light-sweep 8s linear infinite;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, text-shadow, background-position;
+}
+
+/* Premium 3D buttons for gamified learning feedback */
+.btn-3d-emerald {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  border-radius: 1rem;
+  background-color: #10b981;
+  border-bottom: 4px solid #047857;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-3d-emerald:hover {
+  background-color: #059669;
+  border-bottom-width: 4px;
+}
+
+.btn-3d-emerald:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.btn-3d-slate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  border-radius: 1rem;
+  background-color: #475569;
+  border-bottom: 4px solid #1e293b;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-3d-slate:hover {
+  background-color: #334155;
+  border-bottom-width: 4px;
+}
+
+.btn-3d-slate:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+/* Custom modern scrollbar design */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Premium SaaS visual utilities */
+@keyframes ambient-pulse {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.3;
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.15);
+    opacity: 0.45;
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+    opacity: 0.25;
+  }
+}
+
+@keyframes slow-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes subtle-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(3deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(4.5deg);
+  }
+}
+
+@keyframes card-hover-shadow {
+  0% {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  }
+  100% {
+    box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.12), 0 10px 15px -3px rgba(16, 185, 129, 0.08);
+  }
+}
+
+.animate-pulse-slow {
+  animation: ambient-pulse 10s ease-in-out infinite;
+}
+
+.animate-pulse-slower {
+  animation: ambient-pulse 15s ease-in-out infinite 2s;
+}
+
+.animate-spin-slow {
+  animation: slow-spin 25s linear infinite;
+}
+
+.animate-float-character {
+  animation: subtle-float 6s ease-in-out infinite;
+}
+
+@keyframes aurora-drift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -24px) scale(1.1);
+  }
+}
+
+.animate-aurora-drift {
+  animation: aurora-drift 16s ease-in-out infinite;
+}
+
+/* Respect user motion preferences: keep the premium ambient animations
+   from becoming a performance or vestibular-motion concern. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-slow,
+  .animate-pulse-slower,
+  .animate-spin-slow,
+  .animate-float-character,
+  .animate-aurora-drift,
+  .premium-3d-title {
+    animation: none !important;
+  }
+}
+
+/* Glassmorphism panel premium standard */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Premium glows and shadows */
+.glow-emerald {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.25);
+}
+
+.glow-teal {
+  box-shadow: 0 0 35px rgba(20, 184, 166, 0.25);
+}
+
+.glow-indigo {
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+}
+
+/* Premium input states */
+.premium-input {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-input:focus {
+  border-color: #10b981;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1), 0 4px 12px -2px rgba(16, 185, 129, 0.05);
+}
+
+.premium-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(16, 185, 129, 0.25);
+  box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.05), 0 10px 10px -5px rgba(16, 185, 129, 0.03);
+}
+
+/* ============================================================
+   LIGHT / DARK THEME SUPPORT
+   The app is dark by default (unprefixed utility classes below).
+   Adding the `.light` class to <html> swaps the core neutral
+   surface, border and text utilities to a premium light palette,
+   without touching component markup or accent/brand colors.
+   ============================================================ */
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+a,
+span,
+div,
+svg {
+  /* Short fade for micro-interactions. Durations were cut down from 0.35s so
+     hover/state changes feel snappy instead of heavy on low-end devices. */
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    fill 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Applied to <html> by useTheme() while the `.light` class flips. Transitioning
+   every element's color at once during a full theme swap is what makes the
+   toggle stutter — freezing all transitions makes the new palette land in a
+   single frame instead. */
+.no-animations-on-theme-switch,
+.no-animations-on-theme-switch * {
+  transition: none !important;
+}
+
+.light {
+  color-scheme: light;
+}
+
+/* Root page canvases (arbitrary hex values used on the outer wrappers) */
+.light .bg-\[\#0a0f1d\],
+.light .bg-\[\#030712\] {
+  background-color: #f8fafc;
+}
+
+/* Solid slate surfaces -> white / light gray */
+.light .bg-slate-950 { background-color: #f1f5f9; }
+.light .bg-slate-950\/10 { background-color: rgba(15, 23, 42, 0.03); }
+.light .bg-slate-950\/20 { background-color: rgba(15, 23, 42, 0.045); }
+.light .bg-slate-950\/40 { background-color: rgba(255, 255, 255, 0.75); }
+.light .bg-slate-950\/60 { background-color: rgba(255, 255, 255, 0.85); }
+.light .bg-slate-950\/80 { background-color: rgba(248, 250, 252, 0.92); }
+
+.light .bg-slate-900 { background-color: #ffffff; }
+.light .bg-slate-900\/40 { background-color: rgba(255, 255, 255, 0.6); }
+.light .bg-slate-900\/60 { background-color: rgba(255, 255, 255, 0.85); }
+.light .bg-slate-900\/80 { background-color: #f1f5f9; }
+
+.light .bg-slate-800 { background-color: #e2e8f0; }
+.light .bg-slate-700 { background-color: #cbd5e1; }
+
+/* Subtle "white overlay on dark" chips/buttons -> subtle dark-on-light tint */
+.light .bg-white\/5 { background-color: rgba(15, 23, 42, 0.04); }
+.light .bg-white\/10 { background-color: rgba(15, 23, 42, 0.055); }
+.light .bg-white\/15 { background-color: rgba(15, 23, 42, 0.07); }
+.light .bg-white\/20 { background-color: rgba(15, 23, 42, 0.09); }
+.light .bg-white\/\[0\.01\] { background-color: rgba(15, 23, 42, 0.015); }
+.light .bg-white\/\[0\.02\] { background-color: rgba(15, 23, 42, 0.03); }
+.light .bg-white\/\[0\.04\] { background-color: rgba(15, 23, 42, 0.045); }
+.light .bg-white\/\[0\.06\] { background-color: rgba(15, 23, 42, 0.06); }
+.light .bg-white\/\[0\.08\] { background-color: rgba(15, 23, 42, 0.08); }
+
+/* Borders */
+.light .border-white { border-color: #e2e8f0; }
+.light .border-white\/5 { border-color: rgba(15, 23, 42, 0.06); }
+.light .border-white\/10 { border-color: rgba(15, 23, 42, 0.08); }
+.light .border-white\/15 { border-color: rgba(15, 23, 42, 0.1); }
+.light .border-white\/20 { border-color: rgba(15, 23, 42, 0.12); }
+.light .border-white\/30 { border-color: rgba(15, 23, 42, 0.16); }
+
+/* Text colors */
+.light .text-white { color: #0f172a; }
+.light .text-slate-100 { color: #1e293b; }
+.light .text-slate-200 { color: #334155; }
+.light .text-slate-300 { color: #475569; }
+/* 400 is the app's most-used muted shade and #64748b only clears AA on pure
+   white — on the tinted chip and pill surfaces it sits at ~4.2:1. */
+.light .text-slate-400 { color: #5f6b7d; }
+/* 500 was mapped to the same value as 400, which erased a level of the type
+   hierarchy and left muted micro-labels (the School filter chips, stat-tile
+   captions) at 4.24:1 on their tinted surfaces — under AA. */
+.light .text-slate-500 { color: #52606d; }
+.light .text-slate-600 { color: #475569; }
+
+.light .placeholder-slate-500::placeholder { color: #94a3b8; }
+.light .placeholder-slate-600::placeholder { color: #94a3b8; }
+
+/* ------------------------------------------------------------
+   Gradient utilities (bg-gradient-to-* + from-/via-/to- stops)
+   These are NOT plain "bg-*" utilities: Tailwind renders them as
+   background-image gradients driven by their own from/via/to
+   color-stop classes, so the solid bg-slate-* overrides above
+   never touch them. Each dark gradient combination used in the
+   app is re-pointed to its light equivalent here so components
+   (e.g. the Welcome Back banner) render correctly in Light Mode
+   instead of silently keeping their Dark Mode background. Brand/
+   accent gradients (emerald, teal, amber, etc.) are intentionally
+   left untouched since they already read correctly on both themes.
+   ------------------------------------------------------------ */
+
+/* Welcome Back banner surface */
+.light .from-slate-900\/95.via-slate-950\/95.to-slate-900\/90 {
+  background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0.95), rgba(241, 245, 249, 0.95), rgba(255, 255, 255, 0.9));
+}
+
+/* Welcome Back heading gradient text (bg-clip-text) */
+.light .from-white.via-slate-100.to-slate-300 {
+  background-image: linear-gradient(to right, #0f172a, #1e293b, #334155);
+}
+
+/* Indigo text tuned for the (now light) SRS card background */
+.light .text-indigo-50 { color: #1e1b4b; }
+.light .text-indigo-300 { color: #4338ca; }
+
+/* Scrollbar tuned for light backgrounds */
+.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Selection color on light backgrounds */
+.light ::selection {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+/* Scholar Notebook — custom internal notes scrollbar (indigo → teal, matches app accents) */
+.notes-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(129, 140, 248, 0.45) transparent;
+  scrollbar-gutter: stable;
+}
+
+.notes-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notes-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notes-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(129, 140, 248, 0.55), rgba(45, 212, 191, 0.55));
+  border-radius: 9999px;
+}
+
+.notes-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(129, 140, 248, 0.9), rgba(45, 212, 191, 0.9));
+}
+
+/* Deeper indigo/teal thumb on light backgrounds so it stays visible */
+.light .notes-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(67, 56, 202, 0.5), rgba(13, 148, 136, 0.5));
+}
+
+.light .notes-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(67, 56, 202, 0.8), rgba(13, 148, 136, 0.8));
+}
+
+/* ============================================================
+   LIGHT MODE — LEARNING HUB SURFACES & ACCENT CONTRAST
+
+   The neutral overrides above cover the app-wide utilities, but the
+   Learning Hub leans on a few surfaces and accent shades that had no
+   light counterpart. The result was unreadable in Light Mode:
+
+   * bg-slate-900/50 is the Lesson/Exercise/Material card surface and was
+     the one neutral left unmapped — the card stayed dark while
+     `.light .text-white` had already re-pointed its text to near-black.
+   * Modal backdrops (bg-slate-950/95, /90) are full-screen, so leaving
+     them dark also meant dark-on-dark text in the review panel and the
+     document viewer.
+   * The 300–400 accent shades are picked for dark surfaces; on white they
+     fall to roughly 2:1 contrast, which is what made badges, status
+     labels, teacher feedback and links hard to read.
+
+   Everything here is scoped to `.light`, so Dark Mode is untouched.
+   ============================================================ */
+
+/* --- Card surfaces & full-screen overlays --- */
+.light .bg-slate-900\/50 { background-color: rgba(255, 255, 255, 0.78); }
+.light .bg-slate-950\/30 { background-color: rgba(15, 23, 42, 0.06); }
+.light .bg-slate-950\/50 { background-color: rgba(248, 250, 252, 0.88); }
+.light .bg-slate-950\/70 { background-color: rgba(241, 245, 249, 0.9); }
+.light .bg-slate-950\/90 { background-color: rgba(248, 250, 252, 0.96); }
+.light .bg-slate-950\/95 { background-color: rgba(248, 250, 252, 0.97); }
+
+/* --- Accent text: 700 shades keep 4.5:1+ on white --- */
+.light .text-emerald-100,
+.light .text-emerald-200 { color: #065f46; }
+.light .text-emerald-300,
+.light .text-emerald-400,
+.light .text-emerald-500,
+.light .text-emerald-500\/80 { color: #047857; }
+.light .text-rose-300,
+.light .text-rose-400 { color: #be123c; }
+.light .text-amber-300,
+.light .text-amber-400 { color: #b45309; }
+.light .text-indigo-200,
+.light .text-indigo-200\/80,
+.light .text-indigo-300,
+.light .text-indigo-400 { color: #4338ca; }
+.light .text-teal-400 { color: #0f766e; }
+.light .text-blue-400 { color: #1d4ed8; }
+
+/* The oversized 教/学 watermark sits on the (now light) banner. */
+.light .text-white\/\[0\.03\] { color: rgba(15, 23, 42, 0.05); }
+
+/* --- Accent tint surfaces: a /10 wash reads as nothing on white --- */
+.light .bg-emerald-500\/5,
+.light .bg-emerald-500\/\[0\.05\],
+.light .bg-emerald-500\/\[0\.06\] { background-color: rgba(16, 185, 129, 0.1); }
+.light .bg-emerald-500\/10 { background-color: rgba(16, 185, 129, 0.14); }
+.light .bg-emerald-500\/15 { background-color: rgba(16, 185, 129, 0.13); }
+.light .bg-emerald-500\/20 { background-color: rgba(16, 185, 129, 0.18); }
+.light .bg-indigo-500\/10,
+.light .bg-indigo-500\/\[0\.06\],
+.light .bg-indigo-500\/\[0\.07\] { background-color: rgba(99, 102, 241, 0.12); }
+.light .bg-indigo-500\/20,
+.light .bg-indigo-500\/30 { background-color: rgba(99, 102, 241, 0.18); }
+.light .bg-amber-500\/10 { background-color: rgba(245, 158, 11, 0.16); }
+.light .bg-rose-500\/10 { background-color: rgba(244, 63, 94, 0.12); }
+.light .bg-rose-500\/20 { background-color: rgba(244, 63, 94, 0.18); }
+.light .bg-blue-500\/10,
+.light .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.12); }
+.light .bg-slate-500\/10,
+.light .bg-slate-500\/20 { background-color: rgba(15, 23, 42, 0.07); }
+
+/* --- Accent borders: same hue, enough weight to stay visible --- */
+.light .border-emerald-500\/20 { border-color: rgba(16, 185, 129, 0.35); }
+.light .border-emerald-500\/30 { border-color: rgba(16, 185, 129, 0.45); }
+.light .border-rose-500\/20 { border-color: rgba(244, 63, 94, 0.3); }
+.light .border-amber-500\/20 { border-color: rgba(245, 158, 11, 0.35); }
+.light .border-amber-500\/30 { border-color: rgba(245, 158, 11, 0.45); }
+.light .border-indigo-500\/20 { border-color: rgba(99, 102, 241, 0.3); }
+.light .border-slate-500\/20 { border-color: rgba(15, 23, 42, 0.14); }
+
+/* ============================================================
+   LIGHT MODE — SCHOOL SECTION (assignments, recorder, review)
+
+   The School section was built on a few surface and accent steps the
+   tables above never mapped, so Light Mode mixed dark surfaces with an
+   already-inverted light text palette:
+
+   * bg-slate-900/95 is the panel surface of BOTH School dialogs (the
+     assignment editor and the submission review) and of the Teacher Hub
+     dropdown. It stayed near-black while `.light .text-white` had already
+     re-pointed the text inside it to near-black — an unreadable modal.
+   * sky had no light family at all, so the "To do" / "Published" stat
+     tiles and the Edit button fell to roughly 2.3:1.
+   * text-amber-200 on the amber wash was effectively invisible.
+   * The chip surfaces (inactive filter/tab buttons, and the hover state of
+     secondary buttons) use white-overlay steps /[0.03], /[0.07] and /[0.12]
+     that had no counterpart, so both their resting and hover states
+     disappeared against white.
+
+   Scoped to `.light`, so Dark Mode is unchanged.
+   ============================================================ */
+
+/* --- Dialog & panel surfaces: opaque, not translucent --- */
+.light .bg-slate-900\/95 { background-color: #ffffff; }
+
+/* The modal drop shadow is tuned for a dark backdrop; against a light one
+   a 70% black shadow at this blur reads as a dirty grey halo. */
+.light .shadow-\[0_25px_60px_-15px_rgba\(0\,0\,0\,0\.7\)\] {
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.16);
+}
+
+/* --- Remaining white-overlay steps (resting + hover chips) --- */
+.light .bg-white\/\[0\.03\] { background-color: rgba(15, 23, 42, 0.035); }
+.light .bg-white\/\[0\.07\] { background-color: rgba(15, 23, 42, 0.07); }
+.light .bg-white\/\[0\.12\] { background-color: rgba(15, 23, 42, 0.11); }
+
+/* Idle indicator dot / muted fill */
+.light .bg-slate-600 { background-color: #94a3b8; }
+
+/* --- Sky accent (had no light mapping at all) --- */
+.light .text-sky-400 { color: #0369a1; }
+.light .bg-sky-500\/10 { background-color: rgba(2, 132, 199, 0.12); }
+.light .bg-sky-500\/20 { background-color: rgba(2, 132, 199, 0.18); }
+.light .border-sky-500\/20 { border-color: rgba(2, 132, 199, 0.34); }
+
+/* --- Amber/rose steps the recorder uses for its warning and
+       active-recording states --- */
+.light .text-amber-200 { color: #92400e; }
+.light .bg-rose-500\/15 { background-color: rgba(244, 63, 94, 0.15); }
+.light .border-rose-500\/30 { border-color: rgba(244, 63, 94, 0.42); }
+
+/* Opacity variant of an accent whose solid shade is already mapped. Alpha is
+   dropped entirely here: at 0.78 the blend over the light emerald card only
+   reached 3.27:1, under the 4.5:1 needed for the "/100" it labels. */
+.light .text-emerald-300\/70 { color: #047857; }
+
+/* ------------------------------------------------------------
+   STATE VARIANTS (hover: / focus: / active:)
+
+   Tailwind emits a variant-prefixed class as its own selector
+   (`.hover\:bg-white\/\[0\.08\]:hover`), so the bare-class rules above
+   never reached a single hover state. Every neutral chip and secondary
+   button therefore kept its dark-mode hover value in Light Mode, which
+   against white is either invisible (the white-overlay steps) or washed
+   out (the 200/300 text shades).
+
+   The School section leans on these hardest: the header buttons, the
+   assignment filters, the teacher tabs and the recorder's Re-record /
+   Cancel actions all hover through them.
+   ------------------------------------------------------------ */
+
+/* Neutral chip & secondary-button hovers */
+.light .hover\:bg-white\/\[0\.07\]:hover { background-color: rgba(15, 23, 42, 0.07); }
+.light .hover\:bg-white\/\[0\.08\]:hover { background-color: rgba(15, 23, 42, 0.08); }
+.light .hover\:bg-white\/\[0\.12\]:hover { background-color: rgba(15, 23, 42, 0.11); }
+
+/* Text hovers that would otherwise land on near-white */
+.light .hover\:text-slate-200:hover { color: #334155; }
+.light .hover\:text-emerald-200:hover { color: #065f46; }
+
+/* Accent-tint hovers on the teacher action buttons */
+.light .hover\:bg-emerald-500\/20:hover { background-color: rgba(16, 185, 129, 0.2); }
+.light .hover\:bg-rose-500\/20:hover { background-color: rgba(244, 63, 94, 0.2); }
+.light .hover\:bg-sky-500\/20:hover { background-color: rgba(2, 132, 199, 0.2); }
+.light .hover\:border-emerald-500\/20:hover { border-color: rgba(16, 185, 129, 0.35); }
+.light .hover\:border-emerald-500\/30:hover { border-color: rgba(16, 185, 129, 0.45); }
+
+/* --- Placeholders: #94a3b8 is only ~2.8:1 on white --- */
+.light .placeholder-slate-500::placeholder,
+.light .placeholder-slate-600::placeholder { color: #64748b; }
+
+
