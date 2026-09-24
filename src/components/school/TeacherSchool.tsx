@@ -9,6 +9,7 @@ import {
   Clock,
   Eye,
   FileCheck2,
+  HardDrive,
   Loader2,
   Mic,
   Pencil,
