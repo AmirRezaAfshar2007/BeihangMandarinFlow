@@ -16,8 +16,9 @@ import campusLogo1 from './assets/images/campus-logo-1.png';
 import campusLogo2 from './assets/images/campus-logo-2.png';
 import campusLogo3 from './assets/images/campus-logo-3.png';
 import { useTheme } from './hooks/useTheme';
+import { useAppNav } from './hooks/useAppNav';
 
-type ViewState =
+export type ViewState =
   | 'loading'
   | 'login'
   | 'home'
@@ -35,23 +36,30 @@ export default function App() {
   const [user, setUser] = useState<{ studentId: string; fullName: string; role: 'admin' | 'student' } | null>(null);
   const [logoutSuccess, setLogoutSuccess] = useState<string | null>(null);
 
-  // Mirrors `user` for the long-lived window listeners below: they are
-  // registered once and would otherwise close over a stale session value.
   const hasSessionRef = useRef(false);
   useEffect(() => {
     hasSessionRef.current = !!user;
   }, [user]);
-  
-  // Quiz specific deck variables
+
+  // Quiz specific
   const [quizDeck, setQuizDeck] = useState<CharacterItem[]>([]);
   const [quizMode, setQuizMode] = useState<'srs' | 'single'>('srs');
   const [singleChar, setSingleChar] = useState<CharacterItem | undefined>(undefined);
 
-  // Stroke Order Challenge specific deck (independent from the normal quiz flow)
+  // Stroke Order Challenge
   const [strokeChallengeDeck, setStrokeChallengeDeck] = useState<CharacterItem[]>([]);
 
-  // Learning Hub: the currently opened student lesson (student view only)
+  // Learning Hub
   const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
+
+  // ── Browser history (Back/Forward) ─────────────────────────────────────────
+  const { initFromUrl } = useAppNav({
+    view,
+    activeLessonId,
+    isLoggedIn: !!user,
+    setView,
+    setActiveLessonId,
+  });
 
   // Auto-verify active JWT on startup
   useEffect(() => {
@@ -60,8 +68,6 @@ export default function App() {
         try {
           const res = await api.getMe();
           setUser(res.user);
-          // A restored session goes straight back to training, never to the
-          // public landing page (which stays the anonymous entry point).
           setView('dashboard');
         } catch (err) {
           console.warn('Stale session or expired token. Clearing credentials.');
@@ -70,16 +76,13 @@ export default function App() {
           setView('home');
         }
       } else {
-        // Anonymous visitors land on the PUBLIC home page, not the login form.
+        // اگه URL مستقیم باز شده — سعی کن view رو از URL بخون
+        initFromUrl();
         setView('home');
       }
     };
     checkActiveSession();
 
-    // Only a session that actually existed can expire. When a request is
-    // rejected while nobody is signed in — a public endpoint on an out-of-date
-    // server, for example — redirecting would hijack navigation away from the
-    // public landing page, so the visitor is left exactly where they are.
     const handleUnauthorized = () => {
       if (!hasSessionRef.current) return;
       console.warn('Unauthorized request detected. Redirecting to login.');
@@ -96,7 +99,7 @@ export default function App() {
 
     window.addEventListener('unauthorized', handleUnauthorized);
     window.addEventListener('pageshow', handlePageShow);
-    
+
     return () => {
       window.removeEventListener('unauthorized', handleUnauthorized);
       window.removeEventListener('pageshow', handlePageShow);
@@ -118,14 +121,12 @@ export default function App() {
 
   if (view === 'login') {
     return (
-      <Login 
-        onLoginSuccess={(u) => { 
-          setUser(u); 
-          setLogoutSuccess(null); 
-          // Signing in goes straight to the Training Dashboard — never back to
-          // the public landing page.
-          setView('dashboard'); 
-        }} 
+      <Login
+        onLoginSuccess={(u) => {
+          setUser(u);
+          setLogoutSuccess(null);
+          setView('dashboard');
+        }}
         onBackToHome={() => setView('home')}
         initialSuccessMessage={logoutSuccess}
       />
@@ -133,12 +134,8 @@ export default function App() {
   }
 
   return (
-    // NOTE: `overflow-x-clip` (NOT `overflow-x-hidden`) is required here.
-    // `overflow-x-hidden` makes this shell a scroll container (overflow-y is
-    // forced to `auto`), which breaks `position: sticky` on the header below —
-    // the header then scrolls away/under the content instead of pinning.
     <div className="min-h-screen bg-[#0a0f1d] text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-white relative overflow-x-clip">
-      
+
       {/* Decorative ambient background blur nodes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/10 blur-[120px] animate-pulse-slow"></div>
@@ -147,18 +144,18 @@ export default function App() {
         <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]"></div>
       </div>
 
-      {/* Premium Core Global Navigation Rail */}
+      {/* Header */}
       <header className="sticky top-0 z-40 border-b border-white/5 shadow-lg backdrop-blur-2xl bg-slate-950/40">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
-          
-          {/* Logo Brand */}
+
+          {/* Logo */}
           <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
             <div className="relative group w-9 h-9 shrink-0">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur opacity-20 group-hover:opacity-35 transition duration-500"></div>
               <div className="relative w-9 h-9 rounded-full overflow-hidden border border-white/10 p-0.5 bg-slate-950/80 flex items-center justify-center shrink-0 transform hover:scale-105 transition-transform duration-300 aspect-square">
-                <img 
-                  src={beihangLogo} 
-                  alt="Beihang University Logo" 
+                <img
+                  src={beihangLogo}
+                  alt="Beihang University Logo"
                   className="w-full h-full object-contain rounded-full aspect-square"
                   referrerPolicy="no-referrer"
                 />
@@ -170,9 +167,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Session actions. The profile pill and Sign Out only exist for a
-              signed-in session; anonymous visitors on the public landing page
-              get a Sign In button in the same slot. */}
+          {/* Session actions */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {user && (
               <div className="flex items-center gap-2 sm:gap-3 bg-white/[0.04] border border-white/10 p-1.5 sm:pl-3.5 sm:pr-2 rounded-2xl shadow-inner">
@@ -185,7 +180,7 @@ export default function App() {
                 </div>
               </div>
             )}
-            
+
             <button
               id="theme-toggle-btn"
               onClick={toggleTheme}
@@ -222,7 +217,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Responsive Canvas Container */}
+      {/* Main */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pb-20 relative z-10">
         {view === 'loading' && (
           <div className="flex flex-col items-center justify-center py-36 space-y-4">
@@ -240,9 +235,9 @@ export default function App() {
         )}
 
         {view === 'dashboard' && user && (
-          <Dashboard 
-            user={user} 
-            onLogout={handleLogout} 
+          <Dashboard
+            user={user}
+            onLogout={handleLogout}
             onGoToAdmin={() => setView('admin')}
             onGoHome={() => setView('home')}
             onGoToSchool={() => setView('school')}
@@ -251,7 +246,7 @@ export default function App() {
               setQuizMode(mode);
               setSingleChar(single);
               setView('quiz');
-            }} 
+            }}
             onStartStrokeChallenge={(chars) => {
               setStrokeChallengeDeck(chars);
               setView('strokeChallenge');
@@ -260,11 +255,11 @@ export default function App() {
         )}
 
         {view === 'quiz' && (
-          <Quiz 
-            characters={quizDeck} 
-            mode={quizMode} 
-            singleChar={singleChar} 
-            onClose={() => setView('dashboard')} 
+          <Quiz
+            characters={quizDeck}
+            mode={quizMode}
+            singleChar={singleChar}
+            onClose={() => setView('dashboard')}
           />
         )}
 
@@ -277,9 +272,9 @@ export default function App() {
         )}
 
         {view === 'admin' && user && (
-          <Admin 
-            currentUser={user} 
-            onBackToDashboard={() => setView('dashboard')} 
+          <Admin
+            currentUser={user}
+            onBackToDashboard={() => setView('dashboard')}
           />
         )}
 
@@ -303,18 +298,15 @@ export default function App() {
         )}
       </main>
 
-      {/* Premium Professional Academic Footer */}
+      {/* Footer */}
       <footer className="bg-slate-950/40 border-t border-white/5 py-6 mt-auto relative z-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4 sm:gap-6 md:gap-10 text-[11px] font-bold text-slate-500 uppercase tracking-widest text-center">
           <p className="shrink-0">Created by Amirreza</p>
-
-          {/* Campus emblem strip - sits inline between the two credit lines on tablet/laptop */}
           <div className="flex items-center justify-center gap-6 sm:gap-8 md:gap-10 opacity-80 shrink-0">
             <img src={campusLogo1} alt="Beihang University Campus Emblem" className="h-6 sm:h-7 md:h-8 lg:h-9 w-auto object-contain brightness-125" />
             <img src={campusLogo2} alt="Beihang University Campus Emblem" className="h-6 sm:h-7 md:h-8 lg:h-9 w-auto object-contain brightness-125" />
             <img src={campusLogo3} alt="Beihang University Campus Emblem" className="h-6 sm:h-7 md:h-8 lg:h-9 w-auto object-contain brightness-125" />
           </div>
-
           <p className="shrink-0">Built for Beihang University</p>
         </div>
       </footer>
